@@ -1,43 +1,44 @@
 import 'package:amittam/constants.dart';
+import 'package:amittam/pages/first_login_page.dart';
+import 'package:amittam/prefs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'encryptionlib.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  await Prefs.initialize();
+  runApp(MainApp());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: APP_NAME,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: '$APP_NAME Home Page'),
+      theme: prefs.themeData,
+      home: prefs.firstLogin ? FirstLoginPage() : MainHomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class MainHomePage extends StatefulWidget {
+  MainHomePage({Key? key, this.title = APP_NAME}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MainHomePageState createState() => _MainHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MainHomePageState extends State<MainHomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
-    // working encryption example
-    var encrypted = AmpEncrypter('asdfasdfasdfasdf').encrypt('asdf');
-    print(encrypted);
-    print(AmpEncrypter('asdfasdfasdfasdf').decrypt(encrypted));
     setState(() {
       _counter++;
     });

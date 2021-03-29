@@ -4,23 +4,25 @@ import 'package:encrypt/encrypt.dart';
 
 const IV_LENGTH = 16;
 
-class AmpEncrypter {
-  AmpEncrypter(String key) : key = Key.fromUtf8(key);
+class CustomEncrypter {
+  CustomEncrypter(String key) : key = Key.fromUtf8(key);
 
   final Key key;
   Encrypter get _encrypter => Encrypter(AES(key));
 
-  AmpEncrypted encrypt(String input) {
+  static void initialize(String key) => _ampEncrypter = CustomEncrypter(key);
+
+  CustomEncrypted encrypt(String input) {
     var iv = IV.fromSecureRandom(IV_LENGTH);
-    return AmpEncrypted(_encrypter.encrypt(input, iv: iv).base64, iv);
+    return CustomEncrypted(_encrypter.encrypt(input, iv: iv).base64, iv);
   }
 
-  String decrypt(AmpEncrypted ampEncrypted) =>
+  String decrypt(CustomEncrypted ampEncrypted) =>
       _encrypter.decrypt(ampEncrypted.encrypted, iv: ampEncrypted.iv);
 }
 
-class AmpEncrypted {
-  AmpEncrypted(this.cipher, this.iv);
+class CustomEncrypted {
+  CustomEncrypted(this.cipher, this.iv);
 
   final IV iv;
   final String cipher;
@@ -29,14 +31,15 @@ class AmpEncrypted {
 
   String toJson() => '{"iv":"${iv.base64}","cipher":"$cipher"}';
 
-  static AmpEncrypted fromJson(String input) {
-    if (input == null) return null;
+  static CustomEncrypted fromJson(String input) {
+    assert(input.trim().isEmpty);
     var json = jsonDecode(input);
-    return AmpEncrypted(json['cipher'], IV.fromBase64(json['iv']));
+    return CustomEncrypted(json['cipher'], IV.fromBase64(json['iv']));
   }
 
   @override
   String toString() => toJson();
 }
 
-String base64Encode(String input) => base64.encode(utf8.encode(input));
+late CustomEncrypter _ampEncrypter;
+CustomEncrypter get ampEncrypter => _ampEncrypter;
