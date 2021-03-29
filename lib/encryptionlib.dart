@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:encrypt/encrypt.dart';
 
 /*
- * AES mode and padding intentionally not implemented yet
+ * AES mode intentionally not implemented yet
  */
 
 const IV_LENGTH = 16;
