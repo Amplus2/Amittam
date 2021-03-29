@@ -2,24 +2,21 @@ import 'dart:convert';
 
 import 'package:encrypt/encrypt.dart';
 
-/*
- * AES mode intentionally not implemented yet
- */
-
 const IV_LENGTH = 16;
 
 class AmpEncrypter {
   AmpEncrypter(String key) : key = Key.fromUtf8(key);
 
   final Key key;
+  Encrypter get _encrypter => Encrypter(AES(key));
 
   AmpEncrypted encrypt(String input) {
     var iv = IV.fromSecureRandom(IV_LENGTH);
-    return AmpEncrypted(Encrypter(AES(key)).encrypt(input, iv: iv).base64, iv);
+    return AmpEncrypted(_encrypter.encrypt(input, iv: iv).base64, iv);
   }
 
   String decrypt(AmpEncrypted ampEncrypted) =>
-      Encrypter(AES(key)).decrypt(ampEncrypted.encrypted, iv: ampEncrypted.iv);
+      _encrypter.decrypt(ampEncrypted.encrypted, iv: ampEncrypted.iv);
 }
 
 class AmpEncrypted {
