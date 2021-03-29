@@ -1,6 +1,8 @@
 import 'package:amittam/constants.dart';
 import 'package:flutter/material.dart';
 
+import 'encryptionlib.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -32,6 +34,10 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
+    // working encryption example
+    var encrypted = AmpEncrypter('asdfasdfasdfasdf').encrypt('asdf');
+    print(encrypted);
+    print(AmpEncrypter('asdfasdfasdfasdf').decrypt(encrypted));
     setState(() {
       _counter++;
     });

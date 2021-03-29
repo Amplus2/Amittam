@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.amittam">
+    package="de.amplus.amittam">
    <application
         android:label="amittam"
         android:icon="@mipmap/ic_launcher">
