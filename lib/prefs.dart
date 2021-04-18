@@ -32,25 +32,32 @@ class Prefs {
   set passwords(List<CustomEncrypted> pws) => _sharedPreferences.setStringList(
       'passwords', pws.map((pw) => pw.toJson()).toList());
 
-  ThemeData get themeData => darkMode
-      ? ThemeData.dark().copyWith(
-          accentColor: accentColor,
-          primaryColor: accentColor,
-          appBarTheme: AppBarTheme(centerTitle: true),
-          floatingActionButtonTheme: FloatingActionButtonThemeData(
-            backgroundColor: prefs.accentColor,
-            foregroundColor: Colors.white,
-          ),
-        )
-      : ThemeData.light().copyWith(
-          accentColor: accentColor,
-          primaryColor: accentColor,
-          appBarTheme: AppBarTheme(centerTitle: true),
-          floatingActionButtonTheme: FloatingActionButtonThemeData(
-            backgroundColor: prefs.accentColor,
-            foregroundColor: Colors.white,
-          ),
-        );
+  ThemeData get themeData {
+    var appBarTheme = AppBarTheme(centerTitle: true);
+    var fabTheme = FloatingActionButtonThemeData(
+        backgroundColor: prefs.accentColor, foregroundColor: Colors.white);
+    var inputDecorationTheme = InputDecorationTheme(alignLabelWithHint: true);
+
+    return darkMode
+        ? ThemeData.dark().copyWith(
+            accentColor: accentColor,
+            primaryColor: accentColor,
+            colorScheme:
+                ThemeData.dark().colorScheme.copyWith(primary: accentColor),
+            appBarTheme: appBarTheme,
+            floatingActionButtonTheme: fabTheme,
+            inputDecorationTheme: inputDecorationTheme,
+          )
+        : ThemeData.light().copyWith(
+            accentColor: accentColor,
+            primaryColor: accentColor,
+            colorScheme:
+                ThemeData.light().colorScheme.copyWith(primary: accentColor),
+            appBarTheme: appBarTheme,
+            floatingActionButtonTheme: fabTheme,
+            inputDecorationTheme: inputDecorationTheme,
+          );
+  }
 
   // helper methods
   bool getBool(String key, bool defVal) =>

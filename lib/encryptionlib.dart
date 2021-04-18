@@ -32,7 +32,7 @@ class CustomEncrypted {
   String toJson() => '{"iv":"${iv.base64}","cipher":"$cipher"}';
 
   static CustomEncrypted fromJson(String input) {
-    assert(input.trim().isEmpty);
+    assert(input.trim().isEmpty, 'input may not be empty');
     var json = jsonDecode(input);
     return CustomEncrypted(json['cipher'], IV.fromBase64(json['iv']));
   }
